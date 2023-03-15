@@ -2,20 +2,33 @@ package com.digicert.hotelreservations.models;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-@Entity(name = "hotel_sites")
-public class HotelSite implements Serializable {
+@Entity
+@Table(name = "hotel_sites")
+public class HotelSite {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
-    private String location;
+
+    @Column(name = "description", nullable = false)
     private String description;
 
+    /// Ideally this would be a string representing a location on a map, alternatively a country, city and address breakdown, etc.
+    @Column(name = "location", nullable = false)
+    private String location;
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
     private HotelType type;
+
+    public HotelSite() {
+
+    }
 
     public HotelSite(Long id, String name, String location, String description, HotelType type) {
         this.id = id;
@@ -23,10 +36,6 @@ public class HotelSite implements Serializable {
         this.location = location;
         this.description = description;
         this.type = type;
-    }
-
-    public HotelSite() {
-
     }
 
     @Override
