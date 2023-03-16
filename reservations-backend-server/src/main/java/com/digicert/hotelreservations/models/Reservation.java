@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -22,15 +23,15 @@ public class Reservation {
     private Integer roomNumber;
 
     @Column(name = "check_in_date", nullable = false)
-    private Date checkIn;
+    private Timestamp checkIn;
 
     @Column(name = "check_out_date", nullable = false)
-    private Date checkOut;
+    private Timestamp checkOut;
 
     public Reservation() {
     }
 
-    public Reservation(String guestName, Integer roomNumber, Date checkIn, Date checkOut) {
+    public Reservation(String guestName, Integer roomNumber, Timestamp checkIn, Timestamp checkOut) {
         this.guestName = guestName;
         this.roomNumber = roomNumber;
         this.checkIn = checkIn;
@@ -54,8 +55,8 @@ public class Reservation {
         return Objects.equals(id, other.id)
                 && Objects.equals(guestName, other.guestName)
                 && Objects.equals(roomNumber, other.roomNumber)
-                && DateTimeHourComparator.sameDate(checkIn, other.checkIn)
-                && DateTimeHourComparator.sameDate(checkOut, other.checkOut);
+                && Objects.equals(checkIn, other.checkIn)
+                && Objects.equals(checkOut, other.checkOut);
     }
 
     public Long getId() {
@@ -82,19 +83,19 @@ public class Reservation {
         this.roomNumber = roomNumber;
     }
 
-    public Date getCheckIn() {
+    public Timestamp getCheckIn() {
         return checkIn;
     }
 
-    public void setCheckIn(Date checkIn) {
+    public void setCheckIn(Timestamp checkIn) {
         this.checkIn = checkIn;
     }
 
-    public Date getCheckOut() {
+    public Timestamp getCheckOut() {
         return checkOut;
     }
 
-    public void setCheckOut(Date checkOut) {
+    public void setCheckOut(Timestamp checkOut) {
         this.checkOut = checkOut;
     }
 }
