@@ -1,6 +1,6 @@
 package com.digicert.hotelreservations.models;
 
-import com.digicert.hotelreservations.libs.ReservationDateComparator;
+import com.digicert.hotelreservations.framework.DateTimeHourComparator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
@@ -51,12 +51,11 @@ public class Reservation {
             return false;
         }
         Reservation other = (Reservation) obj;
-        boolean equals = Objects.equals(checkIn, other.checkIn);
-        equals = checkIn == other.checkIn;
-        equals = checkIn.equals(other.checkIn);
-        return Objects.equals(id, other.id) && Objects.equals(guestName, other.guestName)
-                && Objects.equals(roomNumber, other.roomNumber) && new ReservationDateComparator(checkIn, other.checkIn) == 0
-                && Objects.equals(checkOut, other.checkOut);
+        return Objects.equals(id, other.id)
+                && Objects.equals(guestName, other.guestName)
+                && Objects.equals(roomNumber, other.roomNumber)
+                && DateTimeHourComparator.sameDate(checkIn, other.checkIn)
+                && DateTimeHourComparator.sameDate(checkOut, other.checkOut);
     }
 
     public Long getId() {
