@@ -1,8 +1,9 @@
 package com.digicert.hotelreservations.framework;
 
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
+import java.sql.Date;
 
 public class DateTimeHourComparator implements Comparator<Date> {
 
