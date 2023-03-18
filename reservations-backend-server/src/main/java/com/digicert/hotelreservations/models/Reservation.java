@@ -31,7 +31,8 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(String guestName, Integer roomNumber, Timestamp checkIn, Timestamp checkOut) {
+    public Reservation(Long id, String guestName, Integer roomNumber, Timestamp checkIn, Timestamp checkOut) {
+        this.id = id;
         this.guestName = guestName;
         this.roomNumber = roomNumber;
         this.checkIn = checkIn;

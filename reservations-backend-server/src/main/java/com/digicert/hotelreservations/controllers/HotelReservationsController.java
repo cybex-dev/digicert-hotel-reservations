@@ -8,11 +8,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @Path("reservations")
@@ -25,6 +25,12 @@ public class HotelReservationsController {
         this.hotelReservationsRepository = hotelReservationsRepository;
     }
 
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response greeting() {
+        return Response.ok("Hello").build();
+    }
+
     /**
      * Get all reservations
      *
@@ -33,11 +39,14 @@ public class HotelReservationsController {
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Reservation> getAllReservations() {
+    public Response getAllReservations() {
         List<Reservation> reservations = new ArrayList<>();
         Iterable<Reservation> results = hotelReservationsRepository.findAll();
         results.forEach(reservations::add);
-        return reservations;
+
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put("count", reservations.size());
+        return Response.ok(new RESTDataResponse<>(true, reservations, metadata)).build();
     }
 
     /**
@@ -66,8 +75,10 @@ public class HotelReservationsController {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response createReservation(Reservation reservation) {
-        // TODO check reservation dates
-//        Optional<Reservation> byRoomNumber = hotelReservationsRepository.findByRoomNumber(1);
+        // check:
+        // - has room got reservation at the same time
+        // - has guest got reservation at the same time
+        // - else create reservation
         Reservation savedReservation = hotelReservationsRepository.save(reservation);
         return Response.ok(new RESTDataResponse<>(true, savedReservation)).build();
     }
@@ -92,6 +103,10 @@ public class HotelReservationsController {
             return Response.ok(new RESTDataResponse<>(true, "No details changed, reservation " + id + " not updated")).build();
         }
 
+        // check:
+        // - has room got reservation at the same time
+        // - has guest got reservation at the same time
+        // - else create reservation
         hotelReservationsRepository.save(reservation);
         return Response.ok(new RESTDataResponse<>(true, "Reservation " + id + " updated")).build();
     }
